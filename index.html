@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jay Raines — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:           #0d1117;
+      --sidebar-bg:   #010409;
+      --text:         #c9d1d9;
+      --text-muted:   #8b949e;
+      --accent:       #58a6ff;
+      --accent-green: #3fb950;
+      --accent-dim:   rgba(88, 166, 255, 0.12);
+      --border:       #21262d;
+      --card-bg:      #161b22;
+      --font:         'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 260px;
+      height: 100vh;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 2.5rem 1.75rem;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .sidebar-top { flex-shrink: 0; }
+
+    .avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--accent-green);
+      font-weight: 700;
+      letter-spacing: -0.05em;
+    }
+
+    .sidebar .name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.02em;
+    }
+
+    .sidebar .tagline {
+      font-size: 0.68rem;
+      color: var(--accent-green);
+      margin-top: 0.3rem;
+      font-style: italic;
+    }
+
+    .sidebar-status {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 0.85rem;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 6px var(--accent-green);
+      flex-shrink: 0;
+    }
+
+    .sidebar nav {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .nav-label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      padding: 0 0.75rem;
+      margin-bottom: 0.4rem;
+      margin-top: 0.25rem;
+    }
+
+    .sidebar nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      border-left: 2px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .sidebar nav a .nav-icon {
+      width: 14px;
+      text-align: center;
+      font-style: normal;
+      color: var(--text-muted);
+      transition: color 0.15s;
+    }
+
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      border-left-color: var(--accent);
+    }
+
+    .sidebar nav a.active .nav-icon,
+    .sidebar nav a:hover .nav-icon { color: var(--accent); }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1.5rem 0;
+    }
+
+    .socials {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .socials a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0;
+      transition: color 0.15s;
+    }
+
+    .socials a:hover { color: var(--accent); }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 1.5rem;
+    }
+
+    .sidebar-footer .copy {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    /* ── MAIN ── */
+    main {
+      margin-left: 260px;
+      flex: 1;
+      max-width: 820px;
+      padding: 0 3.5rem;
+    }
+
+    section {
+      padding: 6rem 0 5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-child { border-bottom: none; padding-bottom: 8rem; }
+
+    .section-eyebrow {
+      font-size: 0.65rem;
+      color: var(--accent-green);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-eyebrow::before { content: '// '; opacity: 0.5; }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: -0.04em;
+      margin-bottom: 2rem;
+    }
+
+    /* ── ABOUT ── */
+    .terminal-window {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+
+    .terminal-bar {
+      background: #1c2128;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .t-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .t-dot.red    { background: #f85149; }
+    .t-dot.yellow { background: #d29922; }
+    .t-dot.green  { background: #3fb950; }
+
+    .terminal-title {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      margin-right: auto;
+      padding-right: 30px;
+    }
+
+    .terminal-body {
+      padding: 1.5rem;
+      font-size: 0.8rem;
+      line-height: 1.9;
+    }
+
+    .terminal-body .prompt { color: var(--accent-green); }
+    .terminal-body .cmd    { color: var(--accent); }
+    .terminal-body .output { color: var(--text-muted); margin-left: 1rem; }
+    .terminal-body .key    { color: var(--text); }
+    .terminal-body .val    { color: #ce9178; }
+    .terminal-body .line   { display: block; }
+
+    .about-prose {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+      max-width: 580px;
+      margin-bottom: 2rem;
+    }
+
+    .about-prose strong { color: var(--text); font-weight: 500; }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag {
+      font-size: 0.68rem;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(88, 166, 255, 0.2);
+      padding: 0.25rem 0.65rem;
+      border-radius: 3px;
+      transition: border-color 0.15s;
+    }
+
+    .tag:hover { border-color: var(--accent); }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.15s, transform 0.15s;
+      text-decoration: none;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .project-icon {
+      font-size: 1rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .project-card h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .project-card p {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .card-footer {
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lang-badge {
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .lang-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .lang-dot.js     { background: #f1e05a; }
+    .lang-dot.py     { background: #3572A5; }
+    .lang-dot.ts     { background: #2b7489; }
+    .lang-dot.rs     { background: #dea584; }
+
+    .star-count {
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* ── CONTACT ── */
+    .contact-intro {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin-bottom: 2.5rem;
+      line-height: 1.85;
+    }
+
+    .contact-intro strong { color: var(--text); }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 420px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.78rem;
+      transition: all 0.15s ease;
+    }
+
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(88, 166, 255, 0.04);
+    }
+
+    .contact-link .c-icon {
+      font-style: normal;
+      font-size: 0.9rem;
+      width: 22px;
+      text-align: center;
+      flex-shrink: 0;
+      color: var(--accent-green);
+      transition: color 0.15s;
+    }
+
+    .contact-link:hover .c-icon { color: var(--accent); }
+
+    .contact-link .c-label { flex: 1; }
+
+    .contact-link .c-arrow {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      transition: transform 0.15s, color 0.15s;
+    }
+
+    .contact-link:hover .c-arrow {
+      transform: translateX(3px);
+      color: var(--accent);
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: #30363d; }
+
+    /* ── CURSOR BLINK ── */
+    .cursor {
+      display: inline-block;
+      width: 8px; height: 1em;
+      background: var(--accent-green);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      main { padding: 0 2rem; }
+    }
+
+    @media (max-width: 720px) {
+      body { flex-direction: column; }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        padding: 0.9rem 1.25rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .sidebar-top { display: flex; align-items: center; gap: 0.75rem; }
+      .avatar { width: 36px; height: 36px; font-size: 0.9rem; margin-bottom: 0; }
+      .sidebar .tagline,
+      .sidebar-status,
+      .sidebar-divider,
+      .socials,
+      .sidebar-footer { display: none; }
+
+      .sidebar nav {
+        flex-direction: row;
+        margin-top: 0;
+        margin-left: auto;
+        gap: 0.1rem;
+      }
+
+      .sidebar nav a { font-size: 0.7rem; padding: 0.4rem 0.6rem; border-left: none; border-bottom: 2px solid transparent; }
+      .sidebar nav a.active,
+      .sidebar nav a:hover { border-bottom-color: var(--accent); border-left-color: transparent; }
+      .nav-icon { display: none; }
+      .nav-label { display: none; }
+
+      main { margin-left: 0; padding: 0 1.25rem; }
+      section { padding: 3.5rem 0; }
+      h2 { font-size: 1.5rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── SIDEBAR ────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="avatar">JR</div>
+      <div>
+        <div class="name">Jay Raines</div>
+        <div class="tagline">// full-stack developer</div>
+        <div class="sidebar-status">
+          <span class="status-dot"></span>
+          open to work
+        </div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-label">navigate</div>
+      <a href="#about" class="active">
+        <i class="nav-icon">~</i> about
+      </a>
+      <a href="#projects">
+        <i class="nav-icon">#</i> projects
+      </a>
+      <a href="#contact">
+        <i class="nav-icon">@</i> contact
+      </a>
+    </nav>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="socials">
+      <a href="https://github.com/yourusername" target="_blank" rel="noopener">
+        ⌥ github.com/yourusername
+      </a>
+      <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener">
+        ⌥ linkedin.com/in/yourusername
+      </a>
+      <a href="mailto:rainesjh@gmail.com">
+        ⌥ rainesjh@gmail.com
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="copy">© 2026 Jay Raines</div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ──────────────────────────────────── -->
+  <main>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="section-eyebrow">about</div>
+      <h2>Hey, I'm Jay.<span class="cursor"></span></h2>
+
+      <div class="terminal-window">
+        <div class="terminal-bar">
+          <span class="t-dot red"></span>
+          <span class="t-dot yellow"></span>
+          <span class="t-dot green"></span>
+          <span class="terminal-title">jay@portfolio ~ whoami</span>
+        </div>
+        <div class="terminal-body">
+          <span class="line"><span class="prompt">❯</span> <span class="cmd">cat</span> profile.json</span>
+          <span class="line output">{</span>
+          <span class="line output">&nbsp;&nbsp;<span class="key">"name"</span>: <span class="val">"Jay Raines"</span>,</span>
+          <span class="line output">&nbsp;&nbsp;<span class="key">"role"</span>: <span class="val">"Full-Stack Developer"</span>,</span>
+          <span class="line output">&nbsp;&nbsp;<span class="key">"location"</span>: <span class="val">"San Francisco, CA"</span>,</span>
+          <span class="line output">&nbsp;&nbsp;<span class="key">"focus"</span>: <span class="val">["web apps", "APIs", "open source"]</span>,</span>
+          <span class="line output">&nbsp;&nbsp;<span class="key">"available"</span>: <span class="val">true</span></span>
+          <span class="line output">}</span>
+        </div>
+      </div>
+
+      <p class="about-prose">
+        I build <strong>fast, minimal web applications</strong> with a focus on clean architecture
+        and great developer experience. I care deeply about the details — both in code and in UI.
+        <br><br>
+        Currently exploring the intersection of <strong>AI tooling and developer workflows</strong>.
+        When I'm not shipping, I'm contributing to open source or writing about things I've learned.
+      </p>
+
+      <div class="tags">
+        <span class="tag">TypeScript</span>
+        <span class="tag">React</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">Python</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Docker</span>
+        <span class="tag">GraphQL</span>
+        <span class="tag">Rust</span>
+        <span class="tag">Linux</span>
+        <span class="tag">Git</span>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="section-eyebrow">projects</div>
+      <h2>Things I've built.</h2>
+
+      <div class="projects-grid">
+
+        <a class="project-card" href="https://github.com/yourusername/project-one" target="_blank" rel="noopener">
+          <div class="project-icon">⚡</div>
+          <h3>project-one</h3>
+          <p>A blazing-fast CLI tool for scaffolding modern web projects with zero config. Supports React, Next.js, and Vite out of the box.</p>
+          <div class="card-footer">
+            <div class="lang-badge"><span class="lang-dot ts"></span> TypeScript</div>
+            <div class="star-count">★ 142</div>
+          </div>
+        </a>
+
+        <a class="project-card" href="https://github.com/yourusername/project-two" target="_blank" rel="noopener">
+          <div class="project-icon">🔍</div>
+          <h3>project-two</h3>
+          <p>An open-source REST API that aggregates and normalizes data from multiple sources. Built for speed with Redis caching and rate limiting.</p>
+          <div class="card-footer">
+            <div class="lang-badge"><span class="lang-dot py"></span> Python</div>
+            <div class="star-count">★ 87</div>
+          </div>
+        </a>
+
+        <a class="project-card" href="https://github.com/yourusername/project-three" target="_blank" rel="noopener">
+          <div class="project-icon">🧩</div>
+          <h3>project-three</h3>
+          <p>A lightweight component library with accessible, unstyled primitives. Drop-in support for any design system — 3kb gzipped.</p>
+          <div class="card-footer">
+            <div class="lang-badge"><span class="lang-dot js"></span> JavaScript</div>
+            <div class="star-count">★ 204</div>
+          </div>
+        </a>
+
+        <a class="project-card" href="https://github.com/yourusername/project-four" target="_blank" rel="noopener">
+          <div class="project-icon">🦀</div>
+          <h3>project-four</h3>
+          <p>A performant markdown parser and static site generator written in Rust. Generates a 100-page site in under 200ms.</p>
+          <div class="card-footer">
+            <div class="lang-badge"><span class="lang-dot rs"></span> Rust</div>
+            <div class="star-count">★ 61</div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="section-eyebrow">contact</div>
+      <h2>Let's work together.</h2>
+
+      <p class="contact-intro">
+        I'm currently <strong>open to new opportunities</strong> — whether that's full-time, contract,
+        or an interesting open-source collaboration. My inbox is always open.
+      </p>
+
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:rainesjh@gmail.com">
+          <i class="c-icon">✉</i>
+          <span class="c-label">rainesjh@gmail.com</span>
+          <span class="c-arrow">→</span>
+        </a>
+        <a class="contact-link" href="https://github.com/yourusername" target="_blank" rel="noopener">
+          <i class="c-icon">⌥</i>
+          <span class="c-label">github.com/yourusername</span>
+          <span class="c-arrow">→</span>
+        </a>
+        <a class="contact-link" href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener">
+          <i class="c-icon">in</i>
+          <span class="c-label">linkedin.com/in/yourusername</span>
+          <span class="c-arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Active nav highlight on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.sidebar nav a');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle(
+              'active',
+              link.getAttribute('href') === '#' + entry.target.id
+            );
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>
